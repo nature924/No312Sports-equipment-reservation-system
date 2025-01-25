@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+   <properties resource="jdbc.properties"></properties>
+ <plugins>
+		<plugin interceptor="com.github.pagehelper.PageInterceptor">
+			<!-- 分页参数合理化  -->
+			<property name="reasonable" value="true"/>
+		</plugin>
+	</plugins> 
+<environments default="development">
+<environment id="development">
+<transactionManager type="JDBC"/>
+<dataSource type="POOLED">
+<property name="driver" value="${database.driverClassName}"/>
+<property name="url" value="${database.url}"/>
+<property name="username" value="${database.username}"/>
+<property name="password" value="${database.password}"/>
+
+</dataSource>
+</environment>
+</environments>
+
+<mappers>
+<mapper resource="edu/equipment/mapper/AdminMapper.xml"/>  
+<mapper resource="edu/equipment/mapper/TeacherMapper.xml"/>  
+<mapper resource="edu/equipment/mapper/StudentMapper.xml"/> 
+<mapper resource="edu/equipment/mapper/CategoryMapper.xml"/>  
+<mapper resource="edu/equipment/mapper/BoardMapper.xml"/> 
+<mapper resource="edu/equipment/mapper/EquipmentMapper.xml"/> 
+<mapper resource="edu/equipment/mapper/AppMapper.xml"/> 
+
+</mappers>
+
+</configuration>
+

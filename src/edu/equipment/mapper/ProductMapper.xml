@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.laundry.dao.ProductDao">
+ <resultMap id="BaseResultMap" type="com.laundry.model.Product">
+    <id column="id" jdbcType="INTEGER" property="id" />   
+     <result column="name" jdbcType="VARCHAR" property="name" />              
+     <result column="detail" jdbcType="VARCHAR" property="detail" />
+     <result column="photo" jdbcType="VARCHAR" property="photo" />              
+     <result column="price" jdbcType="DOUBLE" property="price" /> 
+     <result column="hours" jdbcType="DOUBLE" property="hours" />              
+     <result column="note" jdbcType="VARCHAR" property="note" /> 
+     <result column="boss" jdbcType="VARCHAR" property="boss" />              
+     <result column="phone" jdbcType="VARCHAR" property="phone" /> 
+     <result column="type" jdbcType="VARCHAR" property="type" />              
+     <result column="spot" jdbcType="VARCHAR" property="spot" />  
+      <result column="create_time" jdbcType="VARCHAR" property="create_time" /> 
+  </resultMap>
+ 
+ <select id="findAll"  parameterType="com.laundry.model.Product" resultMap="BaseResultMap">
+  		select * from product
+  		where 1=1
+  		<if test="name != null and name != ''">
+		AND  name LIKE
+		'%${name}%'
+	</if>
+	<if test="boss != null and boss != ''">
+		AND  boss LIKE
+		'%${boss}%'
+	</if>
+	order by id asc
+  </select>
+  
+   
+  <select id="findById" parameterType="com.laundry.model.Product" resultMap="BaseResultMap">
+  select * from product where id=#{id}
+  </select>
+  
+  <insert id="add" parameterType="com.laundry.model.Product" >
+    insert into product (name,detail,photo,price,hours,note,boss,phone,type,spot,create_time)
+    values (#{name,jdbcType=VARCHAR},#{detail,jdbcType=VARCHAR},#{photo,jdbcType=VARCHAR},
+    #{price,jdbcType=DOUBLE},#{hours,jdbcType=DOUBLE},#{note,jdbcType=VARCHAR},#{boss,jdbcType=VARCHAR}
+    ,#{phone,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{spot,jdbcType=VARCHAR},#{create_time,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="update" parameterType="com.laundry.model.Product">
+    update product set    
+      name = #{record.name,jdbcType=VARCHAR},
+      detail = #{record.detail,jdbcType=VARCHAR},
+       photo = #{record.photo,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=DOUBLE},
+      hours = #{record.hours,jdbcType=DOUBLE},
+      note = #{record.note,jdbcType=VARCHAR},
+      boss = #{record.boss,jdbcType=VARCHAR},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      spot = #{record.spot,jdbcType=VARCHAR},
+      create_time = #{record.create_time,jdbcType=VARCHAR}
+      where id=#{record.id}
+  </update>
+  
+ <delete id="delete" parameterType="java.lang.Integer">
+    delete from product
+    where id = #{id}
+  </delete> 
+  
+  
+</mapper>

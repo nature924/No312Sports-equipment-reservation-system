@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.equipment.dao.EquipmentDao">
+ <resultMap id="BaseResultMap" type="edu.equipment.model.Equipment">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="qcbh" jdbcType="VARCHAR" property="qcbh" />
+     <result column="title" jdbcType="VARCHAR" property="title" />
+     <result column="category_id" jdbcType="INTEGER" property="category_id" />
+  	 <result column="detail" jdbcType="VARCHAR" property="detail" />
+  	 <result column="photo" jdbcType="VARCHAR" property="photo" />
+     <result column="stock" jdbcType="INTEGER" property="stock" />
+     <result column="price" jdbcType="DOUBLE" property="price" />
+  	 <result column="create_date" jdbcType="VARCHAR" property="create_date" />
+  	 <result column="status" jdbcType="VARCHAR" property="status" />
+     <result column="admin_d" jdbcType="INTEGER" property="admin_d" />
+  	 <result column="address" jdbcType="VARCHAR" property="address" />
+  	 <result column="note" jdbcType="VARCHAR" property="note" />
+  	 <result column="admin" jdbcType="VARCHAR" property="admin" />
+  	 <result column="category" jdbcType="VARCHAR" property="category" />
+  </resultMap>
+ 
+ 
+   <select id="findById" parameterType="edu.equipment.model.Equipment" resultMap="BaseResultMap">
+      select e.*,a.realname as admin,c.name as category  from equipment e inner join category c on e.category_id = c.id
+     inner join admin a on a.id = e.admin_d   where e.id=#{id}
+  </select>
+   <select id="findAll" parameterType="edu.equipment.model.Equipment" resultMap="BaseResultMap">
+     select e.*,a.realname as admin,c.name as category  from equipment e inner join category c on e.category_id = c.id
+     inner join admin a on a.id = e.admin_d
+     	where 1=1 
+	<if test="title != null and title != ''">
+		AND  e.title LIKE
+		'%${title}%'
+	</if>
+	<if test="status != null and status != ''">
+		AND  e.status= #{status}
+	</if>
+     order by e.id desc
+  </select>
+  
+  <insert id="insert" parameterType="edu.equipment.model.Equipment" >
+    insert into equipment (qcbh,title,category_id,detail,photo,stock,price,create_date,status,admin_d,address,note)
+    values (#{qcbh,jdbcType=VARCHAR},#{title,jdbcType=VARCHAR},#{category_id,jdbcType=INTEGER},
+    #{detail,jdbcType=VARCHAR},#{photo,jdbcType=VARCHAR},#{stock,jdbcType=INTEGER},#{price,jdbcType=DOUBLE}
+    ,#{create_date,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{admin_d,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR},#{note,jdbcType=VARCHAR})
+  </insert>
+  <update id="update" parameterType="edu.equipment.model.Equipment">
+    update equipment set    
+      qcbh = #{record.qcbh,jdbcType=VARCHAR},
+      category_id = #{record.category_id,jdbcType=INTEGER},
+      title = #{record.title,jdbcType=VARCHAR},
+       detail = #{record.detail,jdbcType=VARCHAR},
+       photo = #{record.photo,jdbcType=VARCHAR},
+      stock = #{record.stock,jdbcType=INTEGER},
+      price = #{record.price,jdbcType=DOUBLE},
+       create_date = #{record.create_date,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      admin_d = #{record.admin_d,jdbcType=VARCHAR},
+       address = #{record.address,jdbcType=VARCHAR},
+      note = #{record.note,jdbcType=VARCHAR}
+      where id=#{record.id}
+  </update>
+  
+   <delete id="delUser" parameterType="java.lang.Integer">
+    delete from equipment
+    where id = #{id}
+  </delete> 
+  
+    
+  
+</mapper>

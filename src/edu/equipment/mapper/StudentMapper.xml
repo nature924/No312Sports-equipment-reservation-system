@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.equipment.dao.StudentDao">
+ <resultMap id="BaseResultMap" type="edu.equipment.model.Student">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="stuno" jdbcType="VARCHAR" property="stuno" />
+     <result column="realname" jdbcType="VARCHAR" property="realname" />
+     <result column="sex" jdbcType="VARCHAR" property="sex" />
+  	 <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+  	 <result column="pwd" jdbcType="VARCHAR" property="pwd" />
+     <result column="phone" jdbcType="VARCHAR" property="phone" />
+     <result column="photo" jdbcType="VARCHAR" property="photo" />
+  	 <result column="major" jdbcType="VARCHAR" property="major" />
+  	 <result column="bj" jdbcType="VARCHAR" property="bj" />
+     <result column="grade" jdbcType="VARCHAR" property="grade" />
+  	 <result column="registe_time" jdbcType="VARCHAR" property="registe_time" />
+  </resultMap>
+ 
+ 
+   <select id="findById" parameterType="edu.equipment.model.Student" resultMap="BaseResultMap">
+      select * from student   where id=#{id}
+  </select>
+   <select id="findAll" parameterType="edu.equipment.model.Student" resultMap="BaseResultMap">
+     select * from student
+     	where 1=1 
+	<if test="realname != null and realname != ''">
+		AND  realname LIKE
+		'%${realname}%'
+	</if>
+	<if test="stuno != null and stuno != ''">
+		AND  stuno LIKE
+		'%${stuno}%'
+	</if>
+     order by id desc
+  </select>
+    <select id="findByPhoneAndPwd" parameterType="edu.equipment.model.Student" resultMap="BaseResultMap">
+      select * from  student where stuno=#{stuno} and pwd=#{pwd}
+  </select>
+  
+  <insert id="insert" parameterType="edu.equipment.model.Student" >
+    insert into student (stuno,realname,sex,nickname,pwd,phone,photo,major,bj,grade,registe_time)
+    values (#{stuno,jdbcType=VARCHAR},#{realname,jdbcType=VARCHAR},#{sex,jdbcType=VARCHAR},
+    #{nickname,jdbcType=VARCHAR},#{pwd,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR},#{photo,jdbcType=VARCHAR}
+    ,#{major,jdbcType=VARCHAR},#{bj,jdbcType=VARCHAR},#{grade,jdbcType=VARCHAR},#{registe_time,jdbcType=VARCHAR})
+  </insert>
+  <update id="update" parameterType="edu.equipment.model.Student">
+    update student set    
+      stuno = #{record.stuno,jdbcType=VARCHAR},
+      realname = #{record.realname,jdbcType=VARCHAR},
+      sex = #{record.sex,jdbcType=VARCHAR},
+       nickname = #{record.nickname,jdbcType=VARCHAR},
+      pwd = #{record.pwd,jdbcType=VARCHAR},
+      phone = #{record.phone,jdbcType=VARCHAR},
+       photo = #{record.photo,jdbcType=VARCHAR},
+      major = #{record.major,jdbcType=VARCHAR},
+      bj = #{record.bj,jdbcType=VARCHAR},
+       grade = #{record.grade,jdbcType=VARCHAR},
+      registe_time = #{record.registe_time,jdbcType=VARCHAR}
+      where id=#{record.id}
+  </update>
+  
+   <delete id="delUser" parameterType="java.lang.Integer">
+    delete from student
+    where id = #{id}
+  </delete> 
+  
+    <select id="selectByEno" parameterType="edu.equipment.model.Student" resultMap="BaseResultMap">
+      select * from  student where stuno=#{stuno} 
+  </select>
+  
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.equipment.dao.BoardDao">
+ <resultMap id="BaseResultMap" type="edu.equipment.model.Board">
+    <id column="id" jdbcType="INTEGER" property="id" />   
+     <result column="title" jdbcType="VARCHAR" property="title" />              
+      <result column="content" jdbcType="VARCHAR" property="content" /> 
+        <result column="uid" jdbcType="INTEGER" property="uid" /> 
+        <result column="fbsj" jdbcType="VARCHAR" property="fbsj" /> 
+         <result column="nickname" jdbcType="VARCHAR" property="nickname" /> 
+  </resultMap>
+ 
+ <select id="findAll"  parameterType="edu.equipment.model.Board" resultMap="BaseResultMap">
+  		select b.*,a.realname as nickname from board b inner join admin a on b.uid = a.id
+  		where 1=1 
+	<if test="title != null and title != ''">
+		AND  b.title LIKE
+		'%${title}%'
+	</if>
+  </select>
+  
+   
+  <select id="findById" parameterType="edu.equipment.model.Board" resultMap="BaseResultMap">
+  select b.*,u.realname as nickname from board b inner join admin u on b.uid = u.id where b.id=#{id}
+  </select>
+  
+   <select id="queryById" parameterType="edu.equipment.model.Board" resultMap="BaseResultMap">
+  select * from board where id=#{id}
+  </select>
+  
+  <insert id="add" parameterType="edu.equipment.model.Board" >
+    insert into board (title,content,uid,fbsj)
+    values (#{title,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{uid,jdbcType=INTEGER},#{fbsj,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="update" parameterType="edu.equipment.model.Board">
+    update board set    
+    title = #{record.title,jdbcType=VARCHAR},
+      content = #{record.content,jdbcType=VARCHAR},
+      uid = #{record.uid,jdbcType=INTEGER},
+      fbsj = #{record.fbsj,jdbcType=VARCHAR}
+      where id=#{record.id}
+  </update>
+  
+ <delete id="delete" parameterType="java.lang.Integer">
+    delete from board
+    where id = #{id}
+  </delete> 
+  
+  
+</mapper>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.equipment.dao.TeacherDao">
+ <resultMap id="BaseResultMap" type="edu.equipment.model.Teacher">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="tno" jdbcType="VARCHAR" property="tno" />
+     <result column="pwd" jdbcType="VARCHAR" property="pwd" />
+     <result column="photo" jdbcType="VARCHAR" property="photo" />
+  	 <result column="name" jdbcType="VARCHAR" property="name" />
+  	 <result column="sex" jdbcType="VARCHAR" property="sex" />
+     <result column="age" jdbcType="INTEGER" property="age" />
+     <result column="education" jdbcType="VARCHAR" property="education" />
+  	 <result column="insitute" jdbcType="VARCHAR" property="insitute" />
+  	 <result column="job" jdbcType="VARCHAR" property="job" />
+     <result column="note" jdbcType="VARCHAR" property="note" />
+     <result column="phone" jdbcType="VARCHAR" property="phone" />
+  	 <result column="create_date" jdbcType="VARCHAR" property="create_date" />
+  </resultMap>
+ 
+ 
+   <select id="findById" parameterType="edu.equipment.model.Teacher" resultMap="BaseResultMap">
+      select * from teacher   where id=#{id}
+  </select>
+   <select id="findAll" parameterType="edu.equipment.model.Teacher" resultMap="BaseResultMap">
+     select * from teacher
+     	where 1=1 
+	<if test="name != null and name != ''">
+		AND  name LIKE
+		'%${name}%'
+	</if>
+	<if test="tno != null and tno != ''">
+		AND  tno LIKE
+		'%${tno}%'
+	</if>
+     order by id desc
+  </select>
+    <select id="findByPhoneAndPwd" parameterType="edu.equipment.model.Teacher" resultMap="BaseResultMap">
+      select * from  teacher where tno=#{tno} and pwd=#{pwd}
+  </select>
+  
+  <insert id="insert" parameterType="edu.equipment.model.Teacher" >
+    insert into teacher (tno,pwd,photo,name,sex,age,education,insitute,job,note,phone,create_date)
+    values (#{tno,jdbcType=VARCHAR},#{pwd,jdbcType=VARCHAR},#{photo,jdbcType=VARCHAR},
+    #{name,jdbcType=VARCHAR},#{sex,jdbcType=VARCHAR},#{age,jdbcType=INTEGER},#{education,jdbcType=VARCHAR}
+    ,#{insitute,jdbcType=VARCHAR},#{job,jdbcType=VARCHAR},#{note,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR},#{create_date,jdbcType=VARCHAR})
+  </insert>
+  <update id="update" parameterType="edu.equipment.model.Teacher">
+    update teacher set    
+      tno = #{record.tno,jdbcType=VARCHAR},
+      pwd = #{record.pwd,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+       sex = #{record.sex,jdbcType=VARCHAR},
+      age = #{record.age,jdbcType=INTEGER},
+      education = #{record.education,jdbcType=VARCHAR},
+       insitute = #{record.insitute,jdbcType=VARCHAR},
+      job = #{record.job,jdbcType=VARCHAR},
+      note = #{record.note,jdbcType=VARCHAR},
+       phone = #{record.phone,jdbcType=VARCHAR},
+        photo = #{record.photo,jdbcType=VARCHAR},
+      create_date = #{record.create_date,jdbcType=VARCHAR}
+      where id=#{record.id}
+  </update>
+  
+   <delete id="delUser" parameterType="java.lang.Integer">
+    delete from teacher
+    where id = #{id}
+  </delete> 
+  
+    <select id="selectByEno" parameterType="edu.equipment.model.Teacher" resultMap="BaseResultMap">
+      select * from  teacher where tno=#{tno} 
+  </select>
+  
+</mapper>

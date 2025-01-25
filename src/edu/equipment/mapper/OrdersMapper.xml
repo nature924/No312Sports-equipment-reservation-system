@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.laundry.dao.OrdersDao">
+ <resultMap id="BaseResultMap" type="com.laundry.model.Orders">
+    <id column="id" jdbcType="INTEGER" property="id" />   
+     <result column="order_no" jdbcType="VARCHAR" property="order_no" />              
+     <result column="uid" jdbcType="INTEGER" property="uid" />
+     <result column="product_id" jdbcType="INTEGER" property="product_id" />              
+     <result column="quantity" jdbcType="INTEGER" property="quantity" /> 
+     <result column="total_price" jdbcType="DOUBLE" property="total_price" />              
+     <result column="status" jdbcType="INTEGER" property="status" /> 
+     <result column="state" jdbcType="INTEGER" property="state" />              
+      <result column="create_time" jdbcType="VARCHAR" property="create_time" /> 
+      <result column="nickname" jdbcType="VARCHAR" property="nickname" /> 
+      <result column="pname" jdbcType="VARCHAR" property="pname" /> 
+      <result column="pprice" jdbcType="DOUBLE" property="pprice" /> 
+  </resultMap>
+ 
+ <select id="findAll"  parameterType="com.laundry.model.Orders" resultMap="BaseResultMap">
+  		select o.*,u.nickname as nickname , p.name as pname,p.price as pprice from orders o inner join user u on o.uid = u.id
+  		inner join product p on o.product_id = p.id
+  </select>
+  
+   <select id="findByPage"  parameterType="com.laundry.model.Orders" resultMap="BaseResultMap">
+  		select o.*,u.nickname as nickname , p.name as pname,p.price as pprice from orders o inner join user u on o.uid = u.id
+  		inner join product p on o.product_id = p.id
+  		where 1=1 
+  		<if test="order_no != null and order_no !=''">and o.order_no  LIKE '%${order_no}%'</if>
+  		<if test="nickname != null and nickname !=''">and u.nickname  LIKE '%${nickname}%'</if>
+  </select>
+  <select id="findById" parameterType="com.laundry.model.Orders" resultMap="BaseResultMap">
+  select o.*,u.nickname as nickname , p.name as pname,p.price as pprice from orders o inner join user u on o.uid = u.id
+  		inner join product p on o.product_id = p.id where o.id=#{id}
+  </select>
+  
+  <insert id="add" parameterType="com.laundry.model.Orders" >
+    insert into orders (order_no,uid,product_id,quantity,total_price,status,state,create_time)
+    values (#{order_no,jdbcType=VARCHAR},#{uid,jdbcType=INTEGER},#{product_id,jdbcType=INTEGER},
+    #{quantity,jdbcType=INTEGER},#{total_price,jdbcType=DOUBLE},#{status,jdbcType=INTEGER},#{state,jdbcType=INTEGER}
+    ,#{create_time,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="update" parameterType="com.laundry.model.Orders">
+    update orders set    
+      order_no = #{record.order_no,jdbcType=VARCHAR},
+      uid = #{record.uid,jdbcType=INTEGER},
+       product_id = #{record.product_id,jdbcType=INTEGER},
+      quantity = #{record.quantity,jdbcType=INTEGER},
+      total_price = #{record.total_price,jdbcType=DOUBLE},
+      status = #{record.status,jdbcType=INTEGER},
+      state = #{record.state,jdbcType=INTEGER},
+      create_time = #{record.create_time,jdbcType=VARCHAR}
+      where id=#{record.id}
+  </update>
+  
+ <delete id="delete" parameterType="java.lang.Integer">
+    delete from orders
+    where id = #{id}
+  </delete> 
+   <select id="findMyAll" parameterType="com.laundry.model.Orders" resultMap="BaseResultMap">
+  select o.*,u.nickname as nickname , p.name as pname,p.price as pprice from orders o inner join user u on o.uid = u.id
+  		inner join product p on o.product_id = p.id where o.uid=#{uid}
+  </select>
+  
+  
+  <select id="selectAll" parameterType="com.laundry.model.Orders" resultMap="BaseResultMap">
+ 	 select o.* from orders o 
+  </select>
+ <select id="selectMonth" parameterType="com.laundry.model.Orders" resultMap="BaseResultMap">
+  select o.* from orders o  where DATE_FORMAT( o.create_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+  </select>
+    <select id="findByNo" parameterType="String" resultMap="BaseResultMap">
+  select o.*,u.nickname as nickname , p.name as pname,p.price as pprice from orders o inner join user u on o.uid = u.id
+  		inner join product p on o.product_id = p.id where o.order_no=#{no}
+  </select>
+  
+</mapper>

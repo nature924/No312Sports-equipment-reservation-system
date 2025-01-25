@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.equipment.dao.AdminDao">
+ <resultMap id="BaseResultMap" type="edu.equipment.model.Admin">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="eno" jdbcType="VARCHAR" property="eno" />
+     <result column="pwd" jdbcType="VARCHAR" property="pwd" />
+     <result column="realname" jdbcType="VARCHAR" property="realname" />
+  	 <result column="photo" jdbcType="VARCHAR" property="photo" />
+  </resultMap>
+ 
+ 
+   <select id="findById" parameterType="edu.equipment.model.Admin" resultMap="BaseResultMap">
+      select * from admin   where id=#{id}
+  </select>
+   <select id="findAll" parameterType="edu.equipment.model.Admin" resultMap="BaseResultMap">
+     select * from admin
+     	where 1=1 
+	<if test="realname != null and realname != ''">
+		AND  realname LIKE
+		'%${realname}%'
+	</if>
+	<if test="eno != null and eno != ''">
+		AND  eno LIKE
+		'%${eno}%'
+	</if>
+     order by id desc
+  </select>
+    <select id="findByPhoneAndPwd" parameterType="edu.equipment.model.Admin" resultMap="BaseResultMap">
+      select * from  admin where eno=#{eno} and pwd=#{pwd}
+  </select>
+  
+  <insert id="insert" parameterType="edu.equipment.model.Admin" >
+    insert into admin (eno,pwd,realname,photo)
+    values (#{eno,jdbcType=VARCHAR},#{pwd,jdbcType=VARCHAR},#{realname,jdbcType=VARCHAR},
+    #{photo,jdbcType=VARCHAR})
+  </insert>
+  <update id="update" parameterType="edu.equipment.model.Admin">
+    update admin set    
+      pwd = #{record.pwd,jdbcType=VARCHAR},
+      eno = #{record.eno,jdbcType=VARCHAR},
+      realname = #{record.realname,jdbcType=VARCHAR},
+      photo = #{record.photo,jdbcType=VARCHAR}
+      where id=#{record.id}
+  </update>
+  
+   <delete id="delUser" parameterType="java.lang.Integer">
+    delete from admin
+    where id = #{id}
+  </delete> 
+  
+    <select id="selectByEno" parameterType="edu.equipment.model.Admin" resultMap="BaseResultMap">
+      select * from  admin where eno=#{eno} 
+  </select>
+  
+</mapper>

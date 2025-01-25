@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.laundry.dao.CardDao">
+ <resultMap id="BaseResultMap" type="com.laundry.model.Card">
+    <id column="id" jdbcType="INTEGER" property="id" />   
+     <result column="cno" jdbcType="VARCHAR" property="cno" />              
+      <result column="money" jdbcType="DOUBLE" property="money" /> 
+         
+  </resultMap>
+ 
+ <select id="findAll"  parameterType="com.laundry.model.Card" resultMap="BaseResultMap">
+  select * from card
+  </select>
+  
+  <select id="findByProductMap" parameterType="map" resultMap="BaseResultMap">
+  select * from card where cno like  concat('%',#{cno},'%')
+  </select>
+  
+   
+  <select id="findById" parameterType="com.laundry.model.Card" resultMap="BaseResultMap">
+  select * from card where id=#{id}
+  </select>
+  
+  <insert id="add" parameterType="com.laundry.model.Card" keyProperty="id" useGeneratedKeys="true" >
+    insert into card (cno,money)
+    values (#{cno,jdbcType=VARCHAR},#{money,jdbcType=DOUBLE})
+  </insert>
+  
+  <update id="update" parameterType="com.laundry.model.Card">
+    update card set    
+    cno = #{record.cno,jdbcType=VARCHAR},
+      money = #{record.money,jdbcType=DOUBLE}
+      where id=#{record.id}
+  </update>
+  
+ <delete id="delete" parameterType="java.lang.Integer">
+    delete from card
+    where id = #{id}
+  </delete> 
+  
+  
+   <select id="findByUser" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select c.* from card c inner join user u on u.card_id = c.id  where u.id=#{id}
+  </select>
+</mapper>

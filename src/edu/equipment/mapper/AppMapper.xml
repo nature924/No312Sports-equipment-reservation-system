@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.equipment.dao.AppDao">
+ <resultMap id="BaseResultMap" type="edu.equipment.model.Appointment">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="order_no" jdbcType="VARCHAR" property="order_no" />
+     <result column="e_id" jdbcType="INTEGER" property="e_id" />
+     <result column="quantity" jdbcType="INTEGER" property="quantity" />
+  	 <result column="stuno_or_tno" jdbcType="VARCHAR" property="stuno_or_tno" />
+  	 <result column="create_date" jdbcType="VARCHAR" property="create_date" />
+     <result column="start_time" jdbcType="VARCHAR" property="start_time" />
+     <result column="end_time" jdbcType="VARCHAR" property="end_time" />
+  	 <result column="status" jdbcType="VARCHAR" property="status" />
+  	 <result column="code" jdbcType="VARCHAR" property="code" />
+     <result column="state" jdbcType="VARCHAR" property="state" />
+     <result column="uid" jdbcType="INTEGER" property="uid" />
+     <result column="ename" jdbcType="VARCHAR" property="ename" />
+  </resultMap>
+ 
+ 
+   <select id="findById" parameterType="edu.equipment.model.Appointment" resultMap="BaseResultMap">
+      select a.*,e.title as ename from appointment a inner join equipment e on a.e_id = e.id   where a.id=#{id}
+  </select>
+   <select id="findAll" parameterType="edu.equipment.model.Appointment" resultMap="BaseResultMap">
+     select a.*,e.title as ename from appointment a inner join equipment e on a.e_id = e.id
+     	where 1=1 
+	<if test="order_no != null and order_no != ''">
+		AND   a.order_no LIKE
+		'%${order_no}%'
+	</if>
+	
+     order by a.id desc
+  </select>
+  
+  
+  <insert id="insert" parameterType="edu.equipment.model.Appointment" >
+    insert into appointment (order_no,e_id,quantity,stuno_or_tno,create_date,start_time,end_time,status,code,state,uid)
+    values (#{order_no,jdbcType=VARCHAR},#{e_id,jdbcType=INTEGER},#{quantity,jdbcType=INTEGER},
+    #{stuno_or_tno,jdbcType=VARCHAR},#{create_date,jdbcType=VARCHAR},#{start_time,jdbcType=VARCHAR},#{end_time,jdbcType=VARCHAR}
+    ,#{status,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR},#{state,jdbcType=VARCHAR},#{uid,jdbcType=INTEGER})
+  </insert>
+   <update id="update" parameterType="edu.equipment.model.Appointment">
+    update appointment set    
+      order_no = #{record.order_no,jdbcType=VARCHAR},
+      e_id = #{record.e_id,jdbcType=INTEGER},
+      quantity = #{record.quantity,jdbcType=INTEGER},
+       stuno_or_tno = #{record.stuno_or_tno,jdbcType=VARCHAR},
+       create_date = #{record.create_date,jdbcType=VARCHAR},
+      start_time = #{record.start_time,jdbcType=VARCHAR},
+      end_time = #{record.end_time,jdbcType=VARCHAR},
+       status = #{record.status,jdbcType=VARCHAR},
+      code = #{record.code,jdbcType=VARCHAR},
+      state = #{record.state,jdbcType=VARCHAR},
+       uid = #{record.uid,jdbcType=INTEGER}
+      where id=#{record.id}
+  </update>
+   <delete id="delUser" parameterType="java.lang.Integer">
+    delete from appointment
+    where id = #{id}
+  </delete> 
+  
+ 
+   <select id="findMyAll" parameterType="edu.equipment.model.Appointment" resultMap="BaseResultMap">
+     select a.*,e.title as ename from appointment a inner join equipment e on a.e_id = e.id
+     	where 1=1  and a.uid = #{uid} and a.state = #{state}
+	
+     order by a.id desc
+  </select>
+</mapper>
